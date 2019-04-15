@@ -6,10 +6,10 @@
 
     <title>task-element demo</title>
 
-    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
 
-    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../bower_components/iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../bower_components/iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../task-element.html">
 
     <custom-style>
@@ -22,8 +22,27 @@
       <h3>Basic task-element demo</h3>
       <demo-snippet>
         <template>
-          <task-element></task-element>
+          <task-element id="task-one"></task-element>
+          <task-element id="task-two" canceled></task-element>
+          <task-element id="task-three" done></task-element>
         </template>
+        <script>
+          const taskOne = document.getElementById('task-one');
+          const taskTwo = document.getElementById('task-two');
+          const taskThree = document.getElementById('task-three');
+
+          taskOne.addEventListener('pending-event', (event)=> { console.log(event); });
+          taskOne.addEventListener('cancel-event', (event)=> { console.log(event); });
+          taskOne.addEventListener('done-event', (event)=> { console.log(event); });
+
+          taskTwo.addEventListener('pending-event', (event)=> { console.log(event); });
+          taskTwo.addEventListener('cancel-event', (event)=> { console.log(event); });
+          taskTwo.addEventListener('done-event', (event)=> { console.log(event); });
+
+          taskThree.addEventListener('pending-event', (event)=> { console.log(event); });
+          taskThree.addEventListener('cancel-event', (event)=> { console.log(event); });
+          taskThree.addEventListener('done-event', (event)=> { console.log(event); });
+        </script>
       </demo-snippet>
     </div>
   </body>
