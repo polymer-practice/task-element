@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "dev-tools"
   },
   "devDependencies": {
     "dev-tools": "git@github.com:polymer-practice/dev-tools.git"

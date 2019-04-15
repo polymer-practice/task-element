@@ -1,16 +1,199 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="refresh" content="0;url=demo/" />
-    <title>task-element</title>
-  </head>
-  <body>
-    <!--
-        ELEMENT API DOCUMENTATION SUPPORT COMING SOON
-        Visit demo/index.html to see live examples of your element running.
-        This page will automatically redirect you there when run in the browser
-        with `polymer serve`.
-      -->
-  </body>
-</html>
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-icons">
+<link rel="import" href="../iron-icon">
+<link rel="import" href="../polymer/lib/elements/dom-if.html">
+
+<dom-module id="task-element">
+  <template>
+    <style>
+      :host {
+        display: block;
+        --primary-color: var(--primary-color-task, #3f51b5);
+        --secundary-color: var(--secundary-color-task, #ffffff);
+        --color-cancel: var(--color-cancel-task, red);
+        --color-done: var(--color-done-task, green);
+      }
+
+      .issue {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+      }
+      
+      .buttons-set {
+        margin: 10px 0px;
+      }
+      .task {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: row;
+        color: var(--primary-color);
+      }
+
+      .task.done {
+        color: var(--color-done);
+        text-decoration: line-through;
+      }
+
+      .task.cancel {
+        color: var(--color-cancel);
+        text-decoration: line-through;
+      }
+
+      .title {
+        margin-left: 5px;
+      }
+
+      .btn {
+        width: 75px;
+        height: 38px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        color: var(--secundary-color);
+      }
+
+      .btn.btn-done {
+        background-color: var(--color-done);
+      }
+
+      .btn.btn-cancel {
+        background-color: var(--color-cancel);
+      }
+
+      .btn-pending {
+        background-color: var(--primary-color);
+      }
+
+      @media (min-width: 400px) {
+        .issue {
+          flex-direction: row;
+        }
+
+        .buttons-set {
+          margin: 0px 10px;
+        }
+      }
+
+    </style>
+    <div class="issue">
+      <div class$="[[taskStyles]]">
+        <iron-icon icon="radio-button-checked"></iron-icon>
+        <span class="title">Learn Polymer 2</span>
+      </div>
+      <div class="buttons-set">
+        <template is="dom-if" if="[[_showPendingButton]]">
+            <button type="butotn" on-click="pendingEvent" class="btn btn-pending">Pending</button>
+        </template>
+        <template is="dom-if" if="[[_showDoneButton]]">
+            <button type="button" on-click="doneEvent" class="btn btn-done">Done</button>
+        </template>
+        <template is="dom-if" if="[[_showCancelButton]]">
+            <button type="button" on-click="cancelEvent" class="btn btn-cancel">Cancel</button>
+        </template>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class TaskElement extends Polymer.Element {
+      static get is() { return 'task-element'; }
+      static get properties() {
+        return {
+          key: {
+            type: String,
+            value: 0
+          },
+          taskStyles: {
+            type: String,
+            computed: "changeTaskStyles(canceled, done)"
+          },
+          canceled: {
+            type: Boolean,
+            value: false
+          },
+          done: {
+            type: Boolean,
+            value: false
+          },
+          _showPendingButton: {
+            type: Boolean,
+            value: true
+          },
+          _showCancelButton: {
+            type: Boolean,
+            value: false
+          },
+          _showDoneButton: {
+            type: Boolean,
+            value: false
+          }
+        };
+      }
+
+      changeTaskStyles (canceled, done) {
+        let taskClasses = 'task';
+
+        if (canceled) {
+          taskClasses += ' cancel';
+        } else if (done) {
+          taskClasses += ' done';
+        }
+
+        this._showPendingButton = canceled || done;
+        this._showCancelButton = !canceled;
+        this._showDoneButton = !done;
+
+        return taskClasses;
+      }
+
+      pendingEvent() {
+        const event = new CustomEvent(
+          'pending-event',
+          {
+            bubbles: true,
+            composed: true,
+            detail: {
+              key: this.key
+            }
+          }
+        );
+
+        this.dispatchEvent(event);
+      }
+
+      cancelEvent() {
+        const event = new CustomEvent(
+          'cancel-event',
+          {
+            bubbles: true,
+            composed: true,
+            detail: {
+              key: this.key
+            }
+          }
+        );
+
+        this.dispatchEvent(event);
+      }
+
+      doneEvent() {
+        const event = new CustomEvent(
+          'done-event',
+          {
+            bubbles: true,
+            composed: true,
+            detail: {
+              key: this.key
+            }
+          }
+        )
+
+        this.dispatchEvent(event);
+      }
+    }
+
+    window.customElements.define(TaskElement.is, TaskElement);
+  </script>
+</dom-module>

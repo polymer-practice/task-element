@@ -101,6 +101,10 @@
       static get is() { return 'task-element'; }
       static get properties() {
         return {
+          key: {
+            type: String,
+            value: 0
+          },
           taskStyles: {
             type: String,
             computed: "changeTaskStyles(canceled, done)"
@@ -149,7 +153,10 @@
           'pending-event',
           {
             bubbles: true,
-            composed: true
+            composed: true,
+            detail: {
+              key: this.key
+            }
           }
         );
 
@@ -161,7 +168,10 @@
           'cancel-event',
           {
             bubbles: true,
-            composed: true
+            composed: true,
+            detail: {
+              key: this.key
+            }
           }
         );
 
@@ -173,7 +183,10 @@
           'done-event',
           {
             bubbles: true,
-            composed: true
+            composed: true,
+            detail: {
+              key: this.key
+            }
           }
         )
 
