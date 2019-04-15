@@ -43,6 +43,7 @@
 
       .title {
         margin-left: 5px;
+        width: 95px;
       }
 
       .btn {
@@ -80,7 +81,7 @@
     <div class="issue">
       <div class$="[[taskStyles]]">
         <iron-icon icon="radio-button-checked"></iron-icon>
-        <span class="title">Learn Polymer 2</span>
+        <span class="title">[[title]]</span>
       </div>
       <div class="buttons-set">
         <template is="dom-if" if="[[_showPendingButton]]">
@@ -101,6 +102,10 @@
       static get is() { return 'task-element'; }
       static get properties() {
         return {
+          title: {
+            type: String,
+            value: ''
+          },
           key: {
             type: String,
             value: 0
